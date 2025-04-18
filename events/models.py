@@ -36,10 +36,24 @@ class Event(models.Model):
     )
     event_category = models.CharField(max_length=255, choices=Category.choices)
     event_mode = models.CharField(max_length=100, choices=Mode.choices)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     date = models.DateTimeField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    number_of_bookings = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
+    
+
+class EventBooking(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    quantity = models.PositiveIntegerField()
+    booked_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.email} - {self.event.title} ({self.quantity})"
+
 

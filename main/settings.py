@@ -142,14 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-
-EMAIL_BACKEND = 'django_ses.SESBackend'
+EMAIL_BACKEND = 'main.ses_email_backend.SESBackend'
 DEFAULT_FROM_EMAIL = os.getenv('AWS_SES_FROM_EMAIL')
-AWS_SES_ACCESS_KEY_ID = os.getenv('AWS_SES_ACCESS_KEY_ID')
-AWS_SES_SECRET_ACCESS_KEY = os.getenv('AWS_SES_SECRET_ACCESS_KEY')
-AWS_SES_REGION_NAME = os.getenv('AWS_SES_REGION')
-AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-USE_SES_V2 = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
