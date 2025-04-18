@@ -1,6 +1,10 @@
+import os
 import boto3
 from django.core.mail.backends.base import BaseEmailBackend
 from django.core.mail import EmailMessage
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class SESBackend(BaseEmailBackend):
     def __init__(self, *args, **kwargs):
@@ -8,8 +12,8 @@ class SESBackend(BaseEmailBackend):
         self.client = boto3.client(
             'ses',
             region_name='ap-southeast-2',
-            aws_access_key_id='AKIAXYKJSPFBVCTBLND6',
-            aws_secret_access_key='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'
+            aws_access_key_id=os.getenv('AWS_SES_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.getenv('AWS_SES_SECRET_ACCESS_KEY')
         )
 
     def send_messages(self, email_messages):
