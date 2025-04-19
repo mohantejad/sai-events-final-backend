@@ -53,6 +53,11 @@ class EventViewSet(viewsets.ModelViewSet):
     filterset_class = EventFilter
     search_fields = ["city", "title", "description"]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
     @action(detail=False, methods=["get"], permission_classes=[IsAuthenticated])
     def my_events(self, request):
         user = request.user
@@ -71,6 +76,21 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def like(self, request, pk=None):
+        event = self.get_object()
+        user = request.user
+        if user in event.liked_by.all():
+            event.liked_by.remove(user)
+            liked = False
+        else:
+            event.liked_by.add(user)
+            liked = True
+        return Response({
+            'liked': liked,
+            'likes': event.liked_by.count()
+        })
 
 
 class EventBookingViewSet(viewsets.ModelViewSet):

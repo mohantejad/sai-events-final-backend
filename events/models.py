@@ -41,6 +41,7 @@ class Event(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='event_images/', null=True, blank=True)
     number_of_bookings = models.PositiveIntegerField(default=0)
+    liked_by = models.ManyToManyField(User, related_name="liked_events", blank=True)
 
     def __str__(self):
         return self.title
